@@ -1,13 +1,106 @@
 <!doctype html>
-<html lang="en">
+<html lang="es" class="dark">
 <head>
   <meta charset="utf-8">
   <title>FlyTrackFrontend</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <!-- Configuración Tailwind (LA TUYA EXACTA) -->
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container-low": "#0d1c32",
+            "on-primary": "#233148",
+            "on-primary-fixed": "#0d1c32",
+            "on-primary-fixed-variant": "#39475f",
+            "primary-fixed": "#d6e3ff",
+            "on-secondary-fixed-variant": "#621ca8",
+            "secondary-fixed": "#efdbff",
+            "on-tertiary": "#4a0080",
+            "inverse-primary": "#515f78",
+            "surface-bright": "#2c3951",
+            "tertiary": "#ddb7ff",
+            "on-error-container": "#ffdad6",
+            "on-surface": "#d6e3ff",
+            "tertiary-fixed": "#f0dbff",
+            "error-container": "#93000a",
+            "error": "#ffb4ab",
+            "on-secondary": "#470084",
+            "inverse-on-surface": "#233148",
+            "surface-tint": "#b9c7e4",
+            "on-tertiary-fixed-variant": "#622599",
+            "on-secondary-container": "#cda2ff",
+            "inverse-surface": "#d6e3ff",
+            "surface-container-lowest": "#010e24",
+            "outline-variant": "#44474d",
+            "primary": "#b9c7e4",
+            "secondary-fixed-dim": "#dab9ff",
+            "outline": "#8f9097",
+            "on-error": "#690005",
+            "primary-container": "#0a192f",
+            "on-surface-variant": "#c5c6cd",
+            "tertiary-fixed-dim": "#ddb7ff",
+            "on-tertiary-container": "#a166da",
+            "surface": "#041329",
+            "background": "#041329",
+            "on-tertiary-fixed": "#2c0050",
+            "on-background": "#d6e3ff",
+            "primary-fixed-dim": "#b9c7e4",
+            "secondary-container": "#621ca8",
+            "surface-container-highest": "#27354c",
+            "surface-container-high": "#1c2a41",
+            "on-secondary-fixed": "#2b0053",
+            "surface-dim": "#041329",
+            "secondary": "#dab9ff",
+            "surface-variant": "#27354c",
+            "on-primary-container": "#74829d",
+            "tertiary-container": "#29004a",
+            "surface-container": "#112036"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "fontFamily": {
+            "headline": ["Space Grotesk"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          }
+        },
+      },
+    }
+  </script>
+
+  <!-- Fuentes -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+  <!-- Tus estilos EXACTOS -->
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    body { font-family: 'Inter', sans-serif; }
+    h1, h2, h3, .font-headline { font-family: 'Space Grotesk', sans-serif; }
+    .glass-panel {
+      background: rgba(13, 28, 50, 0.6);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+    }
+  </style>
+
 </head>
-<body>
+
+<body class="bg-surface text-on-surface selection:bg-secondary selection:text-on-secondary">
   <app-root></app-root>
 </body>
 </html>

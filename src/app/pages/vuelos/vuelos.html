@@ -1,0 +1,189 @@
+<div class="flex pt-16 min-h-screen">
+
+  <!-- SIDEBAR -->
+  <aside class="hidden lg:flex flex-col py-6 gap-6 h-screen w-64 fixed left-0 top-16 bg-[#0d1c32] border-r border-white/5 px-6">
+
+    <h2 class="text-lg text-white mb-2">Filtros de Vuelo</h2>
+
+    <!-- ORIGEN -->
+    <div class="space-y-2">
+      <label class="text-xs text-secondary font-bold uppercase">Origen</label>
+
+      <div class="relative flex items-center bg-surface-container-high rounded-xl p-3">
+        <span class="material-symbols-outlined text-secondary mr-2">flight_takeoff</span>
+
+        <input
+          [(ngModel)]="filtroOrigen"
+          (input)="filtrarCiudadesOrigen()"
+          class="bg-transparent outline-none text-white w-full text-sm"
+          placeholder="Ciudad origen"
+        />
+
+        <div *ngIf="ciudadesFiltradasOrigen.length > 0"
+             class="absolute top-full left-0 w-full bg-[#0d1c32] border rounded-lg mt-1 z-50 max-h-40 overflow-y-auto">
+
+          <div *ngFor="let ciudad of ciudadesFiltradasOrigen"
+               (click)="seleccionarOrigen(ciudad)"
+               class="px-3 py-2 hover:bg-secondary cursor-pointer text-white text-sm">
+            {{ ciudad }}
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- DESTINO -->
+    <div class="space-y-2">
+      <label class="text-xs text-secondary font-bold uppercase">Destino</label>
+
+      <div class="relative flex items-center bg-surface-container-high rounded-xl p-3">
+        <span class="material-symbols-outlined text-secondary mr-2">flight_land</span>
+
+        <input
+          [(ngModel)]="filtroDestino"
+          (input)="filtrarCiudadesDestino()"
+          class="bg-transparent outline-none text-white w-full text-sm"
+          placeholder="Ciudad destino"
+        />
+
+        <div *ngIf="ciudadesFiltradasDestino.length > 0"
+             class="absolute top-full left-0 w-full bg-[#0d1c32] border rounded-lg mt-1 z-50 max-h-40 overflow-y-auto">
+
+          <div *ngFor="let ciudad of ciudadesFiltradasDestino"
+               (click)="seleccionarDestino(ciudad)"
+               class="px-3 py-2 hover:bg-secondary cursor-pointer text-white text-sm">
+            {{ ciudad }}
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- FECHA -->
+    <div class="space-y-2">
+      <label class="text-xs text-secondary font-bold uppercase">Fecha</label>
+
+      <div class="flex items-center bg-surface-container-high rounded-xl p-3">
+        <span class="material-symbols-outlined text-secondary mr-2">calendar_month</span>
+
+        <input
+          type="date"
+          [(ngModel)]="filtroFecha"
+          [min]="fechaMinima"
+          class="bg-transparent outline-none text-white w-full text-sm"
+        />
+      </div>
+    </div>
+
+    <!-- PASAJEROS -->
+    <div class="space-y-2">
+      <label class="text-xs text-secondary font-bold uppercase">Pasajeros</label>
+
+      <div (click)="togglePasajeros()"
+           class="flex justify-between items-center bg-surface-container-high p-3 rounded-xl cursor-pointer text-sm text-white">
+
+        {{ adultos }} Adultos, {{ ninos }} Niños
+        <span class="material-symbols-outlined text-xs">expand_more</span>
+      </div>
+
+      <!-- DROPDOWN -->
+      <div *ngIf="mostrarPasajeros"
+           class="bg-[#0d1c32] p-4 rounded-xl shadow-xl">
+
+        <!-- ADULTOS -->
+        <div class="flex justify-between mb-3">
+          <span class="text-white text-sm">Adultos</span>
+
+          <div class="flex gap-2">
+            <button (click)="restarAdulto()" class="px-2">-</button>
+            <span>{{ adultos }}</span>
+            <button (click)="sumarAdulto()" class="px-2">+</button>
+          </div>
+        </div>
+
+        <!-- NIÑOS -->
+        <div class="flex justify-between">
+          <span class="text-white text-sm">Niños</span>
+
+          <div class="flex gap-2">
+            <button (click)="restarNino()" class="px-2">-</button>
+            <span>{{ ninos }}</span>
+            <button (click)="sumarNino()" class="px-2">+</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- BOTÓN -->
+    <button
+      (click)="filtrar()"
+      class="mt-4 bg-gradient-to-r from-secondary to-secondary-container text-black py-3 rounded-xl font-bold hover:scale-95 transition">
+      Buscar
+    </button>
+
+    <!-- ERROR -->
+    <div *ngIf="mensajeError"
+         class="bg-red-500/20 text-red-300 p-3 rounded-lg text-sm">
+      {{ mensajeError }}
+    </div>
+
+  </aside>
+
+  <!-- MAIN -->
+  <main class="flex-1 lg:ml-64 p-8 max-w-6xl mx-auto">
+
+    <!-- HEADER -->
+    <header class="mb-10">
+      <h1 class="text-4xl font-bold text-white">
+        {{ origen }} → {{ destino }}
+      </h1>
+
+      <p class="text-slate-400 text-sm">
+        {{ vuelosFiltrados.length }} vuelos encontrados
+      </p>
+    </header>
+
+    <!-- LISTADO -->
+    <div *ngIf="vuelosFiltrados.length > 0" class="space-y-6">
+
+      <div *ngFor="let vuelo of vuelosFiltrados; trackBy: trackByVuelo"
+           class="bg-surface-container-low p-6 rounded-xl flex justify-between items-center hover:bg-surface-container-high transition">
+
+        <div>
+          <p class="text-xl text-white font-bold">
+            {{ vuelo.origen }} → {{ vuelo.destino }}
+          </p>
+
+          <p class="text-sm text-slate-400">
+            Fecha: {{ vuelo.fecha }}
+          </p>
+
+          <p class="text-sm text-slate-400">
+            Hora: {{ vuelo.horaSalida }}
+          </p>
+
+          <p class="text-xs text-indigo-300">
+            {{ vuelo.aerolinea }} • {{ vuelo.numeroVuelo }}
+          </p>
+        </div>
+
+        <div class="text-right">
+          <p class="text-secondary text-2xl font-bold">
+            ${{ vuelo.precio }}
+          </p>
+
+          <button
+            (click)="seleccionarVuelo(vuelo)"
+            class="bg-secondary text-black px-4 py-2 rounded-lg font-bold mt-2">
+            Seleccionar
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+</div>
