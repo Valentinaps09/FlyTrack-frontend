@@ -1,1 +1,165 @@
-<p>reserva works!</p>
+<form (ngSubmit)="reservar()" #form="ngForm">
+
+<main class="pt-24 pb-32 px-4 md:px-8 max-w-7xl mx-auto">
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+    <!-- FORMULARIO -->
+    <div class="lg:col-span-8 space-y-8">
+
+      <section class="bg-surface-container-low rounded-xl p-6 md:p-8">
+
+        <h2 class="text-xl font-bold mb-6">Pasajeros</h2>
+
+        <div *ngFor="let p of pasajeros; let i = index"
+             class="p-6 bg-surface-container-high rounded-xl mb-4">
+
+      <div class="flex justify-between items-center mb-4">
+
+      <h3 class="text-sm font-bold">
+        Pasajero {{ i + 1 }} 
+        <span class="text-xs text-slate-400">
+          ({{ p.tipo === 'Niño' ? 'Menor de edad' : 'Adulto' }})
+        </span>
+      </h3>
+
+      <!-- BOTÓN ELIMINAR -->
+      <button *ngIf="i>0"
+              (click)="eliminarPasajero(i)"
+              type="button"
+              class="text-red-400 hover:text-red-600">
+        🗑
+      </button>
+
+    </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            <input [(ngModel)]="p.nombre"
+                   name="nombre{{i}}"
+                   placeholder="Nombre"
+                   required
+                   class="p-3 rounded-lg bg-surface-container-highest" />
+
+            <input [(ngModel)]="p.documento"
+                  name="documento{{i}}"
+                  placeholder="Documento"
+                  required
+                  class="p-3 rounded-lg bg-surface-container-highest"
+                  [ngClass]="{'border border-red-500': erroresCampos['documento' + i]}" />
+
+            <div *ngIf="erroresCampos['documento' + i]" 
+                class="text-red-400 text-xs mt-1">
+              {{ erroresCampos['documento' + i] }}
+            </div>
+
+            <input type="date"
+                   [(ngModel)]="p.fechaNacimiento"
+                   name="fecha{{i}}"
+                   [max]="fechaMaxima"
+                   required
+                   class="p-3 rounded-lg bg-surface-container-highest" />
+
+            <input [(ngModel)]="p.email"
+                   name="email{{i}}"
+                   required
+                   #email="ngModel"
+                   class="p-3 rounded-lg bg-surface-container-highest"
+                   [ngClass]="{'border border-red-500': email.invalid && email.touched}" />
+
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 mt-4">
+          <button type="button"
+                  (click)="agregarPasajero('Adulto')"
+                  class="py-3 border border-dashed rounded-xl">
+            + Adulto
+          </button>
+
+          <button type="button"
+                  (click)="agregarPasajero('Niño')"
+                  class="py-3 border border-dashed rounded-xl">
+            + Niño
+          </button>
+        </div>
+
+      </section>
+
+    </div>
+
+    <!-- RESUMEN -->
+    <aside class="lg:col-span-4">
+
+      <div class="bg-surface-container-high rounded-xl p-6">
+
+        <h3 class="text-lg font-bold mb-4">Resumen</h3>
+
+        <div *ngIf="vuelo">
+
+          <p class="text-xl font-bold">
+            {{ vuelo.origen }} → {{ vuelo.destino }}
+          </p>
+
+          <p class="text-sm text-slate-400">
+            {{ vuelo.fecha }} - {{ vuelo.horaSalida }}
+          </p>
+
+          <p class="text-sm">
+            {{ vuelo.aerolinea }}
+          </p>
+
+          <div class="mt-6 text-2xl font-bold text-secondary">
+            ${{ vuelo.precio }}
+          </div>
+
+        </div>
+
+        <!-- ERRORES -->
+        <div *ngIf="errores && errores.length > 0"
+             class="mt-4 mb-4 p-4 bg-red-500/20 border border-red-500 rounded-xl">
+
+          <ul class="text-red-300 text-sm">
+            <li *ngFor="let e of errores">• {{ e }}</li>
+          </ul>
+
+        </div>
+
+        <!-- BOTÓN CORRECTO -->
+        <button type="submit"
+                class="w-full mt-4 py-4 bg-gradient-to-br from-[#dab9ff] to-[#621ca8] text-white rounded-xl font-bold">
+          Reservar
+        </button>
+
+      </div>
+
+    </aside>
+
+  </div>
+
+</main>
+
+</form>
+
+<!-- MODAL -->
+<div *ngIf="mostrarModal"
+     class="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+
+  <div class="bg-[#0d1c32] p-8 rounded-2xl text-center shadow-2xl max-w-sm w-full">
+
+    <h2 class="text-2xl font-bold text-white mb-4">
+      🎉 Reserva exitosa
+    </h2>
+
+    <p class="text-slate-400 mb-6">
+      Tu vuelo ha sido reservado correctamente.
+    </p>
+
+    <button (click)="cerrarModal()"
+            class="w-full py-3 bg-gradient-to-br from-[#dab9ff] to-[#621ca8] text-white rounded-xl font-bold">
+      Continuar
+    </button>
+
+  </div>
+
+</div>

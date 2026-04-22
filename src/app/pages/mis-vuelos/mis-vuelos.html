@@ -1,1 +1,172 @@
-<p>mis-vuelos works!</p>
+<body class="min-h-screen pb-32">
+
+  <!-- NAV -->
+  <header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-slate-950/60 backdrop-blur-xl shadow-2xl shadow-indigo-900/10">
+    <div class="text-2xl font-bold text-indigo-300 font-['Space_Grotesk']">FlyTrack</div>
+  </header>
+
+  <main class="pt-24 px-6 max-w-5xl mx-auto">
+
+    <!-- HEADER + BOTÓN -->
+    <section class="mb-6 flex justify-between items-center">
+
+      <h1 class="headline-font text-4xl font-bold">Mis Vuelos</h1>
+
+      <div class="flex gap-3">
+
+        <!-- BOTÓN BUSCAR -->
+        <button
+          (click)="solicitarCodigo()"
+          [disabled]="loading"
+          class="px-6 py-3 bg-gradient-to-br from-[#dab9ff] to-[#621ca8] rounded-xl text-white font-bold disabled:opacity-50">
+          {{ loading ? 'Procesando...' : 'Buscar' }}
+        </button>
+
+        <!-- BOTÓN CERRAR -->
+        <button
+          *ngIf="vuelos.length > 0 || codigoEnviado"
+          (click)="cerrar()"
+          class="px-5 py-3 rounded-xl bg-red-500 text-white font-bold hover:bg-red-600 transition">
+          Cerrar
+        </button>
+
+      </div>
+
+    </section>
+
+    <!-- INPUT -->
+    <section class="mb-8">
+      <div class="relative">
+
+        <div class="absolute inset-y-0 left-5 flex items-center text-secondary">
+          <span class="material-symbols-outlined">search</span>
+        </div>
+
+        <input
+          [(ngModel)]="documento"
+          class="w-full bg-surface-container-low rounded-xl py-4 pl-14 pr-6"
+          placeholder="Buscar por número de documento"
+        />
+
+      </div>
+    </section>
+
+    <!-- MENSAJES -->
+    <div *ngIf="mensaje" class="mt-4 p-4 rounded-xl bg-green-100 text-green-800 border border-green-300">
+      {{ mensaje }}
+    </div>
+
+    <div *ngIf="error" class="mt-4 p-4 rounded-xl bg-red-100 text-red-700 border border-red-300">
+      {{ error }}
+    </div>
+
+    <!-- CÓDIGO -->
+    <div *ngIf="codigoEnviado" class="mt-6 bg-surface-container-high p-5 rounded-xl">
+
+      <p class="text-sm text-secondary mb-4">
+        Se envió un código de verificación a tu correo.
+      </p>
+
+      <div class="flex gap-3">
+
+        <input
+          [(ngModel)]="codigo"
+          placeholder="Código"
+          class="flex-1 p-3 rounded-lg bg-surface-container-highest"
+        />
+
+        <button
+          (click)="verificarCodigo()"
+          [disabled]="loading"
+          class="px-6 bg-secondary text-on-secondary rounded-lg font-bold disabled:opacity-50">
+          Verificar
+        </button>
+
+      </div>
+
+      <button
+        (click)="reenviarCodigo()"
+        [disabled]="loading"
+        class="mt-3 text-xs text-tertiary underline disabled:opacity-50">
+        Reenviar código
+      </button>
+
+    </div>
+
+    <!-- VUELOS -->
+    <div *ngIf="vuelos.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
+
+      <div
+        *ngFor="let v of vuelos"
+        class="bg-surface-container-low rounded-xl overflow-hidden shadow-xl hover:-translate-y-1 duration-300">
+
+        <div
+          class="h-32 bg-cover bg-center relative"
+          [style.background-image]="'url(' + v.imagen + ')'">
+
+          <div class="absolute inset-0 bg-gradient-to-t from-surface-container-low"></div>
+
+          <div class="absolute top-4 right-4 bg-secondary/90 px-3 py-1 rounded-full text-[10px] font-bold">
+            {{ v.estado }}
+          </div>
+
+        </div>
+
+        <div class="p-6">
+
+          <div class="flex justify-between mb-6">
+
+            <div>
+              <p class="text-[10px] uppercase">Código Reserva</p>
+              <h3 class="text-lg font-bold text-secondary">{{ v.codigo }}</h3>
+            </div>
+
+            <div class="text-right">
+              <p class="text-[10px] uppercase">Aerolínea</p>
+              <p class="text-sm">{{ v.aerolinea }}</p>
+            </div>
+
+          </div>
+
+          <div class="flex justify-between items-center mb-8">
+
+            <div class="text-center">
+              <span class="text-3xl font-bold">{{ v.origen }}</span>
+            </div>
+
+            <span class="material-symbols-outlined text-secondary">flight_takeoff</span>
+
+            <div class="text-center">
+              <span class="text-3xl font-bold">{{ v.destino }}</span>
+            </div>
+
+          </div>
+
+          <div class="flex justify-between items-end">
+
+            <div>
+              <p>{{ v.fecha }}</p>
+              <p class="font-bold">{{ v.hora }}</p>
+              <p class="text-sm mt-1">Asiento: {{ v.asiento }}</p>
+            </div>
+
+            <button class="bg-gradient-to-br from-secondary to-secondary-container px-5 py-2 rounded-xl text-sm font-bold">
+              Ver detalles
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- SIN RESULTADOS -->
+    <div *ngIf="!loading && codigoEnviado && vuelos.length === 0 && !error" class="text-center mt-10">
+      No hay vuelos disponibles
+    </div>
+
+  </main>
+
+</body>

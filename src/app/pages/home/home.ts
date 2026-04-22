@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { VueloService, Vuelo } from '../../services/vuelo';
+import { VueloService, Vuelo } from '../../services/vuelo.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';

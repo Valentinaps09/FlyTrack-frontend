@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { VueloService, Vuelo } from '../../services/vuelo';
+import { VueloService, Vuelo } from '../../services/vuelo.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ChangeDetectorRef } from '@angular/core';
@@ -165,9 +165,16 @@ filtrar() {
     this.mensajeError = '';
   }
 
-  seleccionarVuelo(vuelo: Vuelo) {
-    console.log('Vuelo seleccionado:', vuelo);
-  }
+seleccionarVuelo(vuelo: any) {
+  this.router.navigate(['/reserva'], {
+    state: {
+      vueloId: vuelo.id,   
+      vuelo: vuelo,        
+      adultos: this.adultos,
+      ninos: this.ninos
+    }
+  });
+}
 
   trackByVuelo(index: number, vuelo: any) {
   return vuelo.id || index;
